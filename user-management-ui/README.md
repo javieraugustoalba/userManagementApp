@@ -1,70 +1,256 @@
-# Getting Started with Create React App
+# User Management App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack application for managing users, locations, and schedules, developed with a .NET Core backend and a React frontend. MongoDB serves as the database backend.
 
-## Available Scripts
+## Repository
 
-In the project directory, you can run:
+[User Management App Repository](https://github.com/javieraugustoalba/userManagementApp.git)
 
-### `npm start`
+## Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+  - [Backend Installation](#backend-installation)
+  - [Frontend Installation](#frontend-installation)
+- [Usage](#usage)
+  - [Run Locally](#run-locally)
+  - [API Documentation](#api-documentation)
+- [API Endpoints](#api-endpoints)
+  - [User Endpoints](#user-endpoints)
+  - [Location Endpoints](#location-endpoints)
+  - [Schedule Endpoints](#schedule-endpoints)
+- [Deployment](#deployment)
+  - [Deploy Backend](#deploy-backend)
+  - [Deploy Frontend](#deploy-frontend)
+- [Contributing](#contributing)
+- [License](#license)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+Follow these instructions to set up the project on your local machine.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Prerequisites
 
-### `npm run build`
+Make sure you have the following installed:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [.NET Core SDK 6.0 or later](https://dotnet.microsoft.com/)
+- [MongoDB](https://www.mongodb.com/try/download/community) (running locally or accessible via URI)
+- [Node.js](https://nodejs.org/) and npm (for the frontend)
+- [Git](https://git-scm.com/)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend Installation
 
-### `npm run eject`
+1. Navigate to the backend folder:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```bash
+   cd userManagementApp//user-management-backend/UserManagementWebApi
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Restore NuGet packages:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   dotnet restore
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. Set up the MongoDB connection:
+   - Open `appsettings.json` and update the `ConnectionStrings` section with your MongoDB connection details:
 
-## Learn More
+     ```json
+     {
+       "ConnectionStrings": {
+         "MongoDb": "mongodb://localhost:27017/UserManagementDb"
+       },
+       "DatabaseName": "UserManagementDb"
+     }
+     ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. Build the project:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```bash
+   dotnet build
+   ```
 
-### Code Splitting
+### Frontend Installation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. Navigate to the frontend folder:
 
-### Analyzing the Bundle Size
+   ```bash
+   cd userManagementApp/user-management-ui
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+2. Install dependencies:
 
-### Making a Progressive Web App
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+3. Configure the API base URL:
+   - Open the `src/api.js` file and ensure the base URL matches your backend's URL:
 
-### Advanced Configuration
+     ```javascript
+     import axios from "axios";
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+     const api = axios.create({
+       baseURL: "http://localhost:5124/",
+     });
 
-### Deployment
+     export default api;
+     ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Usage
 
-### `npm run build` fails to minify
+### Run Locally
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### Backend
+
+1. Start the MongoDB server:
+
+   ```bash
+   mongod
+   ```
+
+2. Run the backend application:
+
+   ```bash
+   cd userManagementApp/user-management-backend/UserManagementWebApi
+   dotnet run
+   ```
+
+3. The backend API will be accessible at:
+   - `http://localhost:5124`
+
+#### Frontend
+
+1. Start the frontend application:
+
+   ```bash
+   cd userManagementApp/user-management-ui
+   npm start
+   ```
+
+2. The frontend will be accessible at:
+   - `http://localhost:3000`
+
+### API Documentation
+
+Swagger UI is included for testing the backend API.
+
+- Open your browser and navigate to:
+  - `http://localhost:5124/swagger`
+
+## API Endpoints
+
+### User Endpoints
+
+- **GET** `/api/User`
+  - Retrieve all users.
+- **GET** `/api/User/{id}`
+  - Retrieve a single user by ID.
+- **POST** `/api/User`
+  - Create a new user.
+  - Example Request:
+    ```json
+    {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "userType": "Administrator"
+    }
+    ```
+- **PUT** `/api/User/{id}`
+  - Update an existing user.
+- **DELETE** `/api/User/{id}`
+  - Delete a user by ID.
+
+### Location Endpoints
+
+- **GET** `/api/Location`
+  - Retrieve all locations.
+- **GET** `/api/Location/{id}`
+  - Retrieve a single location by ID.
+- **POST** `/api/Location`
+  - Create a new location.
+  - Example Request:
+    ```json
+    {
+      "name": "Office A",
+      "address": "123 Main Street",
+      "status": "Active",
+      "accessSchedules": []
+    }
+    ```
+- **PUT** `/api/Location/{id}`
+  - Update an existing location.
+- **DELETE** `/api/Location/{id}`
+  - Delete a location by ID.
+
+### Schedule Endpoints
+
+- **POST** `/api/Location/{id}/schedule`
+  - Add an access schedule to a location.
+  - Example Request:
+    ```json
+    {
+      "userId": "user123",
+      "locationId": "location456",
+      "startTime": "2024-12-22T10:00:00Z",
+      "endTime": "2024-12-22T12:00:00Z"
+    }
+    ```
+- **DELETE** `/api/Location/{id}/schedule/{userId}`
+  - Remove an access schedule for a user.
+
+## Deployment
+
+### Deploy Backend
+
+1. Publish the backend application:
+
+   ```bash
+   cd userManagementApp/user-management-backend/UserManagementWebApi
+   dotnet publish -c Release -o ./publish
+   ```
+
+2. Deploy the contents of the `publish` folder to your production server.
+3. Configure the environment variables for MongoDB connection and other settings.
+
+### Deploy Frontend
+
+1. Build the frontend for production:
+
+   ```bash
+   cd userManagementApp/user-management-ui
+   npm run build
+   ```
+
+2. Deploy the contents of the `build` folder to your web server or hosting service.
+
+## Contributing
+
+1. Fork the repository.
+2. Create a new branch:
+
+   ```bash
+   git checkout -b feature-name
+   ```
+
+3. Make your changes and commit them:
+
+   ```bash
+   git commit -m "Add new feature"
+   ```
+
+4. Push your branch:
+
+   ```bash
+   git push origin feature-name
+   ```
+
+5. Open a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
