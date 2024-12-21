@@ -4,7 +4,7 @@ import Pagination from "../../components/Pagination";
 import { CompanyLocation } from "../../types/CompanyLocation";
 
 const Dashboard: React.FC = () => {
-  const [locations, setLocations] = useState<CompanyLocation[]>([]); // Updated type
+  const [locations, setLocations] = useState<CompanyLocation[]>([]); 
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const Dashboard: React.FC = () => {
   }, [currentPage]);
 
   const fetchLocations = async () => {
-    const data = await getLocations(currentPage); // Ensure this matches CompanyLocation[]
+    const data = await getLocations(currentPage); 
     setLocations(data);
   };
 

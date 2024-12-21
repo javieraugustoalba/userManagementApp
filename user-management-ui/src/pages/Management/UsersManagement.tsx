@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { getUsers, deleteUser } from "../../services/UserService";
+import { getUsers, deleteUser, sendInvitation } from "../../services/UserService";
 import { UserForm } from "../../components/UserForm";
-
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-}
+import { User } from "../../types/User";
 
 const UsersManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
     fetchUsers();
@@ -28,6 +21,17 @@ const UsersManagement: React.FC = () => {
     fetchUsers();
   };
 
+  const handleInvite = async () => {
+    if (!email) {
+      alert("Please enter an email address");
+      return;
+    }
+
+    await sendInvitation(email);
+    alert("Invitation sent!");
+    setEmail(""); 
+  };
+
   return (
     <div>
       <h1>Users Management</h1>
@@ -40,6 +44,13 @@ const UsersManagement: React.FC = () => {
           </li>
         ))}
       </ul>
+      <h2>Invite User</h2>
+      <input
+        type="email"
+        placeholder="Enter email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button onClick={() => handleInvite}>Send Invitation</button>
     </div>
   );
 };
