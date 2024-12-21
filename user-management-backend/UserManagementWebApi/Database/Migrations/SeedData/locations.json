@@ -1,0 +1,5 @@
+[
+    { "name": "Head Office", "address": "123 Main Street", "status": "Active" },
+    { "name": "Branch Office", "address": "456 High Street", "status": "Inactive" }
+  ]
+  
