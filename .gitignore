@@ -20,3 +20,52 @@ build/
 # Logs
 logs/
 *.log
+
+.fake
+
+# Build artifacts
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider and VS Code
+.idea/
+.vscode/
+.vscode/settings.json
+
+# ASP.NET
+appsettings.json
+appsettings.*.json
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# dotnet-specific files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Environment-specific files
+.env
+.env.*
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Coverage results
+coverage/
+*.coverage
+*.coveragexml
+*.sonar
+
+# Resharper
+_ReSharper/

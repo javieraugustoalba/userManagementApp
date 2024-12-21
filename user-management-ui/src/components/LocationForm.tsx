@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createLocation } from "../services/LocationService";
+import { LocationStatus } from "../types/LocationStatus";
 
 interface LocationFormProps {
   refreshLocations: () => void;
@@ -8,7 +9,7 @@ interface LocationFormProps {
 export const LocationForm: React.FC<LocationFormProps> = ({ refreshLocations }) => {
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [status, setStatus] = useState<"Active" | "Inactive">("Active");
+  const [status, setStatus] = useState<LocationStatus>(LocationStatus.Active);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +17,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({ refreshLocations }) 
     refreshLocations();
     setName("");
     setAddress("");
-    setStatus("Active");
+    setStatus(LocationStatus.Active);
   };
 
   return (
@@ -44,9 +45,12 @@ export const LocationForm: React.FC<LocationFormProps> = ({ refreshLocations }) 
       </div>
       <div>
         <label>Status</label>
-        <select value={status} onChange={(e) => setStatus(e.target.value as "Active" | "Inactive")}>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value as LocationStatus)}
+        >
+          <option value={LocationStatus.Active}>Active</option>
+          <option value={LocationStatus.Inactive}>Inactive</option>
         </select>
       </div>
       <button type="submit">Add Location</button>

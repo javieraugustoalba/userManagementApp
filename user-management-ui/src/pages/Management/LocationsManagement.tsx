@@ -11,16 +11,16 @@ const LocationsManagement: React.FC = () => {
     }, []);
 
     const fetchLocations = async () => {
-        const data = await getLocations(1);
+        const data = await getLocations();
         setLocations(data);
     };
 
-    const handleDelete = async (locationId: number) => {
+    const handleDelete = async (locationId: string) => {
         await deleteLocation(locationId);
         fetchLocations();
     };
 
-    const handleToggleStatus = async (locationId: number, currentStatus: string) => {
+    const handleToggleStatus = async (locationId: string, currentStatus: string) => {
         await updateLocationStatus(locationId, currentStatus === "Active" ? "Inactive" : "Active");
         fetchLocations();
     };

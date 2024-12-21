@@ -39,7 +39,7 @@ const UsersManagement: React.FC = () => {
       <ul>
         {users.map((user) => (
           <li key={user.id}>
-            {user.firstName} {user.lastName} ({user.role})
+            {user.firstName} {user.lastName} ({user.userType})
             <button onClick={() => handleDelete(user.id)}>Delete</button>
           </li>
         ))}

@@ -39,7 +39,7 @@ const ScheduleManagement: React.FC = () => {
       };
     
       const fetchLocations = async () => {
-        const data = await getLocations(1);
+        const data = await getLocations();
         setLocations(data);
       };
 

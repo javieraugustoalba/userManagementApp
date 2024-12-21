@@ -1,6 +1,10 @@
 export interface CreateUser {
     firstName: string;
     lastName: string;
+    address: string;
     email: string;
-    role: string;
+    country: string;
+    city: string;
+    password: string;
+    userType: string;
   }

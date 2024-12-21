@@ -1,7 +1,10 @@
+import { LocationStatus } from "./LocationStatus";
+import { Schedule } from "./Schedule";
+
 export interface CompanyLocation {
-    id: number;
-    name: string;
-    address: string;
-    status: "Active" | "Inactive";
-  }
-  
+  id: string; 
+  name: string;
+  address: string;
+  status: LocationStatus; 
+  accessSchedules: Schedule[]; 
+}
