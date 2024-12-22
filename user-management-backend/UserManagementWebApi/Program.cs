@@ -44,7 +44,7 @@ var app = builder.Build();
 
 var initializer = app.Services.GetRequiredService<DatabaseInitializer>();
 initializer.Initialize();
-
+AdminUserInitializer.Initialize("mongodb://localhost:27017");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
