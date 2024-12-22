@@ -15,17 +15,25 @@ namespace UserManagementBackend.Controllers
         {
             var client = new MongoClient(dbSettings.Value.ConnectionString);
             var database = client.GetDatabase(dbSettings.Value.DatabaseName);
-            _users = database.GetCollection<User>("Users");
+            _users = database.GetCollection<User>("users");
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var user = await _users.Find(u => u.Email == request.Email).FirstOrDefaultAsync();
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, hashedPassword))
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             {
-                return Unauthorized("Invalid email or password");
+                return BadRequest("Email and password are required.");
+            }
+
+            var user = await _users.Find(u => u.Email == request.Email).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return Unauthorized("Invalid email or password.");
+            }
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+            {
+                return Unauthorized("Invalid email or password.");
             }
 
             return Ok(new
@@ -43,9 +51,4 @@ namespace UserManagementBackend.Controllers
         }
     }
 
-    public class LoginRequest
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
 }
