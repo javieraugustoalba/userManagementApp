@@ -5,9 +5,10 @@ export interface User {
   firstName: string;
   lastName: string;
   address: string;
+  phoneNumber: string;
   email: string;
   country: string;
   city: string;
   password: string;
-  userType: UserTypes;
+  userType: string;
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { createUser } from "../services/UserService";
+import { UserTypes } from "../enums/UserTypes";
 
 interface UserFormProps {
   refreshUsers: () => void;
@@ -12,7 +13,6 @@ export const UserForm: React.FC<UserFormProps> = ({ refreshUsers }) => {
     firstName: Yup.string().required("First Name is required"),
     lastName: Yup.string().required("Last Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    userType: Yup.string().required("User Type is required"),
     password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
@@ -21,23 +21,29 @@ export const UserForm: React.FC<UserFormProps> = ({ refreshUsers }) => {
     .required("Password is required"),
   });
 
-  const handleSubmit = async (values: { firstName: string; lastName: string; email: string; 
-    address: string, country: string, city: string, password: string, userType: string }) => {
-    await createUser(values);
+  const handleSubmit = async (values: { id: string; firstName: string; lastName: string; email: string; 
+    address: string, phoneNumber: string, country: string, city: string, password: string, userType: string }) => {
+    const userPayload = {
+      ...values,
+      userType: values.userType === "Employee" ? "Employee" : "Administrator",
+    };
+    await createUser(userPayload);
     refreshUsers();
   };
 
   return (
     <Formik
       initialValues={{
+        id: "",
         firstName: "",
         lastName: "",
         email: "",
         address: "",
+        phoneNumber: "",
         country: "",
         city: "",
         password: "",
-        userType: "",
+        userType: UserTypes.Employee,
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
