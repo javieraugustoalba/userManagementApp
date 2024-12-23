@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using UserManagementBackend.Models;
 using UserManagementBackend.Services;
 
@@ -24,10 +25,15 @@ namespace UserManagementBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(User newUser)
+        public async Task<IActionResult> Post(User user)
         {
-            await _userService.CreateAsync(newUser);
-            return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+            if (string.IsNullOrWhiteSpace(user.Id))
+            {
+                user.Id = ObjectId.GenerateNewId().ToString();
+            }
+            
+            await _userService.CreateAsync(user);
+            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]
