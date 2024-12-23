@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using UserManagementBackend.Models;
@@ -52,16 +53,36 @@ namespace UserManagementBackend.Controllers
         }
 
         [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateStatus(string id, [FromBody] Location updatedStatusModel)
+        public async Task<IActionResult> UpdateStatus(string id, [FromBody] JsonElement body)
         {
-            var location = await _locationService.GetAsync(id);
+            if (body.TryGetProperty("status", out var statusProperty))
+            {
+                string statusString = statusProperty.GetString() ?? "";
 
-            if (location == null) return NotFound();
+                if (!Enum.TryParse<LocationStatus>(statusString, true, out var newStatus))
+                {
+                    return BadRequest("Invalid status value.");
+                }
 
-            location.Status = updatedStatusModel.Status;
-            await _locationService.UpdateAsync(id, location);
-            return NoContent();
+                var location = await _locationService.GetAsync(id);
+
+                if (location == null)
+                {
+                    return NotFound();
+                }
+
+                location.Status = newStatus;
+
+                await _locationService.UpdateAsync(id, location);
+
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest("Status field is missing.");
+            }
         }
+
 
 
         [HttpPut("{id}")]

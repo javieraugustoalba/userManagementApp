@@ -1,4 +1,5 @@
 import api from "../api";
+import { LocationStatus } from "../enums/LocationStatus";
 import { CompanyLocation } from "../types/CompanyLocation";
 
 const API_URL = "api/Location";
