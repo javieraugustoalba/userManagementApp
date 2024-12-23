@@ -12,7 +12,7 @@ namespace UserManagementBackend.Services
         {
             var client = new MongoClient(dbSettings.Value.ConnectionString);
             var database = client.GetDatabase(dbSettings.Value.DatabaseName);
-            _schedules = database.GetCollection<Schedule>("Schedules");
+            _schedules = database.GetCollection<Schedule>("schedules");
         }
 
         public async Task<List<Schedule>> GetAsync() =>

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using UserManagementBackend.Models;
 using UserManagementBackend.Services;
 
@@ -33,10 +34,25 @@ namespace UserManagementBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Schedule newSchedule)
+        public async Task<IActionResult> Create(Schedule schedule)
         {
-            await _scheduleService.CreateAsync(newSchedule);
-            return CreatedAtAction(nameof(Get), new { id = newSchedule.Id }, newSchedule);
+            if (string.IsNullOrWhiteSpace(schedule.UserId) || schedule.UserId == "Select a User")
+            {
+                return BadRequest(new { Message = "Invalid User: Please select a valid user." });
+            }
+
+            if (string.IsNullOrWhiteSpace(schedule.LocationId) || schedule.LocationId == "Select a Location")
+            {
+                return BadRequest(new { Message = "Invalid Location: Please select a valid location." });
+            }
+
+            if (string.IsNullOrWhiteSpace(schedule.Id))
+            {
+                schedule.Id = ObjectId.GenerateNewId().ToString();
+            }
+
+            await _scheduleService.CreateAsync(schedule);
+            return CreatedAtAction(nameof(Get), new { id = schedule.Id }, schedule);
         }
 
         [HttpPut("{id}")]

@@ -1,6 +1,5 @@
 import api from "../api";
 import { CompanyLocation } from "../types/CompanyLocation";
-import { CreateLocation } from "../types/CreateLocation";
 
 const API_URL = "api/Location";
 
@@ -9,7 +8,7 @@ export const getLocations = async (): Promise<CompanyLocation[]> => {
     return response.data;
 };
 
-export const createLocation = async (location: CreateLocation): Promise<void> => {
+export const createLocation = async (location: CompanyLocation): Promise<void> => {
     await api.post(API_URL, location);
 };
 

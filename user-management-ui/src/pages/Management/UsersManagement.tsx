@@ -16,7 +16,7 @@ const UsersManagement: React.FC = () => {
     setUsers(data);
   };
 
-  const handleDelete = async (userId: number) => {
+  const handleDelete = async (userId: string) => {
     await deleteUser(userId);
     fetchUsers();
   };

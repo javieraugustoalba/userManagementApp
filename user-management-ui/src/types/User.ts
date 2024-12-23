@@ -1,7 +1,7 @@
-import { UserTypes } from "./UserTypes";
+import { UserTypes } from "../enums/UserTypes";
 
 export interface User {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   address: string;
