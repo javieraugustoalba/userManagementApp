@@ -5,26 +5,19 @@ import { User } from "../../types/User";
 import { getUsers } from "../../services/UserService";
 import { getLocations } from "../../services/LocationService";
 import { CompanyLocation } from "../../types/CompanyLocation";
-
-interface Schedule {
-    id: number;
-    userId: number;
-    locationId: number;
-    startTime: string;
-    endTime: string;
-}
+import { Schedule } from "../../types/Schedule";
 
 const ScheduleManagement: React.FC = () => {
     const [schedules, setSchedules] = useState<Schedule[]>([]);
-    const [employees, setEmployees] = useState<User[]>([]); 
+    const [users, setUsers] = useState<User[]>([]);
     const [locations, setLocations] = useState<CompanyLocation[]>([]);
-    const [userId, setUserId] = useState<number | null>(null); 
+    const [userId, setUserId] = useState<number | null>(null);
     const [locationId, setLocationId] = useState<number | null>(null);
-  
+
 
     useEffect(() => {
         fetchSchedules();
-        fetchEmployees();
+        fetchUsers();
         fetchLocations();
     }, []);
 
@@ -33,47 +26,46 @@ const ScheduleManagement: React.FC = () => {
         setSchedules(data);
     };
 
-    const fetchEmployees = async () => {
+    const fetchUsers = async () => {
         const data = await getUsers();
-        setEmployees(data);
-      };
-    
-      const fetchLocations = async () => {
+        setUsers(data);
+    };
+
+    const fetchLocations = async () => {
         const data = await getLocations();
         setLocations(data);
-      };
+    };
 
-    const handleDelete = async (scheduleId: number) => {
+    const handleDelete = async (scheduleId: string) => {
         await deleteSchedule(scheduleId);
         fetchSchedules();
     };
+
+
+    const getUserById = (userId: string) =>
+        users.find((user) => user.id === userId);
+
+    const getLocationById = (locationId: string) =>
+        locations.find((location) => location.id === locationId);
 
     return (
         <div>
             <h1>Schedule Management</h1>
             <ScheduleForm refreshSchedules={fetchSchedules} />
             <ul>
-                {schedules.map((schedule) => (
-                    <li key={schedule.id}>
-                        User ID: {schedule.userId} - Location ID: {schedule.locationId} - Time: {schedule.startTime} to {schedule.endTime}
-                        <button onClick={() => handleDelete(schedule.id)}>Delete</button>
-                    </li>
-                ))}
+                {schedules.map((schedule) => {
+                    const user = getUserById(schedule.userId);
+                    const location = getLocationById(schedule.locationId);
+                    return (
+                        <li key={schedule.id}>
+                            <strong>User:</strong> {user?.firstName} {user?.lastName} -{" "}
+                            <strong>Location:</strong> {location?.name} -{" "}
+                            <strong>Time:</strong> {schedule.startTime} to {schedule.endTime}
+                            <button onClick={() => handleDelete(schedule.id)}>Delete</button>
+                        </li>
+                    );
+                })}
             </ul>
-            <select onChange={(e) => setUserId(Number(e.target.value))}>
-                {employees.map((employee) => (
-                    <option key={employee.id} value={employee.id}>
-                        {employee.firstName}
-                    </option>
-                ))}
-            </select>
-            <select onChange={(e) => setLocationId(Number(e.target.value))}>
-                {locations.map((location) => (
-                    <option key={location.id} value={location.id}>
-                        {location.name}
-                    </option>
-                ))}
-            </select>
         </div>
     );
 };

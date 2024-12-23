@@ -13,7 +13,7 @@ namespace UserManagementBackend.Services
         {
             var client = new MongoClient(dbSettings.Value.ConnectionString);
             var database = client.GetDatabase(dbSettings.Value.DatabaseName);
-            _users = database.GetCollection<User>("Users");
+            _users = database.GetCollection<User>("users");
         }
 
         public async Task<List<User>> GetAsync() => await _users.Find(_ => true).ToListAsync();

@@ -1,7 +1,7 @@
 export interface Schedule {
-  id: number;
-  userId: number;
-  locationId: number;
+  id: string;
+  userId: string;
+  locationId: string;
   startTime: string; 
   endTime: string;   
 }

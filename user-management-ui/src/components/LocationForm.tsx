@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createLocation } from "../services/LocationService";
-import { LocationStatus } from "../types/LocationStatus";
+import { LocationStatus } from "../enums/LocationStatus";
+import { CompanyLocation } from "../types/CompanyLocation";
 
 interface LocationFormProps {
   refreshLocations: () => void;
@@ -13,7 +14,16 @@ export const LocationForm: React.FC<LocationFormProps> = ({ refreshLocations }) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await createLocation({ name, address, status });
+
+    const newLocation: CompanyLocation = {
+      id: "",
+      name,
+      address,
+      status,
+      accessSchedules: [],
+    };
+
+    await createLocation(newLocation);
     refreshLocations();
     setName("");
     setAddress("");

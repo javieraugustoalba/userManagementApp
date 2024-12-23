@@ -35,16 +35,20 @@ namespace UserManagementBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Location newLocation)
+        public async Task<IActionResult> Create([FromBody] Location location)
         {
-            if (!string.IsNullOrEmpty(newLocation.Id) && !ObjectId.TryParse(newLocation.Id, out _))
+            if (string.IsNullOrWhiteSpace(location.Id))
             {
-                return BadRequest("Invalid Id format. Id must be a valid 24-character hexadecimal string.");
+                location.Id = ObjectId.GenerateNewId().ToString();
             }
 
-            newLocation.Id = null; 
-            await _locationService.CreateAsync(newLocation);
-            return CreatedAtAction(nameof(Get), new { id = newLocation.Id }, newLocation);
+            if (location.AccessSchedules == null)
+            {
+                location.AccessSchedules = new List<Schedule>();
+            }
+
+            await _locationService.CreateAsync(location);
+            return CreatedAtAction(nameof(Get), new { id = location.Id }, location);
         }
 
         [HttpPatch("{id}/status")]
@@ -54,7 +58,7 @@ namespace UserManagementBackend.Controllers
 
             if (location == null) return NotFound();
 
-            location.Status = updatedStatusModel.Status; 
+            location.Status = updatedStatusModel.Status;
             await _locationService.UpdateAsync(id, location);
             return NoContent();
         }
@@ -70,7 +74,7 @@ namespace UserManagementBackend.Controllers
                 return NotFound();
             }
 
-            updatedLocation.Id = location.Id; 
+            updatedLocation.Id = location.Id;
             await _locationService.UpdateAsync(id, updatedLocation);
 
             return NoContent();
